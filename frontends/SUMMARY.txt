@@ -1,0 +1,252 @@
+
+╔══════════════════════════════════════════════════════════════════╗
+║              ✅ FRONTENDS NEXT.JS CREADOS                        ║
+║          2 Aplicaciones Listas para Desarrollo                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📁 ESTRUCTURA CREADA
+═══════════════════════════════════════════════════════════════════
+
+frontends/
+├── README.md                    # Documentación general
+├── dev.sh                       # Script para dev local
+├── build.sh                     # Script para builds
+│
+├── web-rettai/                  # 🌐 SITIO PRINCIPAL
+│   ├── app/
+│   │   ├── page.tsx            # Landing page
+│   │   ├── layout.tsx          # Layout
+│   │   └── globals.css         # Estilos
+│   ├── package.json
+│   ├── next.config.js          # Config (export estático)
+│   ├── tailwind.config.js
+│   └── README.md
+│
+└── web-rettai-admin/           # 🔐 PANEL ADMIN
+    ├── app/
+    │   ├── page.tsx            # Dashboard
+    │   ├── layout.tsx          # Layout
+    │   └── globals.css         # Estilos
+    ├── package.json
+    ├── next.config.js          # Config (basePath: /admin)
+    ├── tailwind.config.js
+    └── README.md
+
+═══════════════════════════════════════════════════════════════════
+🌐 APLICACIÓN 1: web-rettai (Sitio Principal)
+═══════════════════════════════════════════════════════════════════
+
+📍 URL Producción: https://rettai.com/
+🔧 Puerto Dev: 3000
+📦 Framework: Next.js 14 + Tailwind CSS
+
+Características:
+✅ Landing page con gradientes y animaciones
+✅ Cards de características (Productos, Seguro, Rápido)
+✅ Link al panel admin
+✅ Dark mode support
+✅ Static export para Amplify/S3
+✅ Responsive design
+
+Contenido:
+- Hero section con título y descripción
+- 3 feature cards
+- CTA buttons (Admin / GitHub)
+- Footer con info técnica
+
+═══════════════════════════════════════════════════════════════════
+🔐 APLICACIÓN 2: web-rettai-admin (Panel Admin)
+═══════════════════════════════════════════════════════════════════
+
+📍 URL Producción: https://rettai.com/admin
+🔧 Puerto Dev: 3001
+📦 Framework: Next.js 14 + Tailwind CSS
+
+Características:
+✅ Dashboard completo con métricas
+✅ 4 Cards de estadísticas (Productos, Órdenes, Clientes, Ingresos)
+✅ Sección de acciones rápidas
+✅ Header con navegación
+✅ Footer con info del sistema
+✅ Dark mode support
+✅ Static export con basePath /admin
+✅ Tema profesional slate
+
+Dashboard:
+📦 Productos: 0
+🛒 Órdenes: 0
+👥 Clientes: 0
+💰 Ingresos: $0
+
+Acciones Rápidas:
+➕ Nuevo Producto
+📊 Ver Reportes
+⚙️ Configuración
+
+═══════════════════════════════════════════════════════════════════
+🚀 DESARROLLO LOCAL
+═══════════════════════════════════════════════════════════════════
+
+Opción 1: Script automático
+─────────────────────────────
+cd frontends
+./dev.sh
+
+Esto:
+1. Instala dependencias si no existen
+2. Inicia ambas apps en paralelo
+3. Main:  http://localhost:3000
+4. Admin: http://localhost:3001
+
+Opción 2: Manual (2 terminales)
+─────────────────────────────
+Terminal 1:
+cd frontends/web-rettai
+npm install
+npm run dev
+
+Terminal 2:
+cd frontends/web-rettai-admin
+npm install
+npm run dev
+
+═══════════════════════════════════════════════════════════════════
+📦 BUILD PARA PRODUCCIÓN
+═══════════════════════════════════════════════════════════════════
+
+Opción 1: Script automático
+─────────────────────────────
+cd frontends
+./build.sh
+
+Genera:
+- web-rettai/out/       → Para raíz (/)
+- web-rettai-admin/out/ → Para /admin
+
+Opción 2: Manual
+─────────────────────────────
+# Main site
+cd web-rettai
+npm run build
+
+# Admin
+cd web-rettai-admin
+npm run build
+
+═══════════════════════════════════════════════════════════════════
+🌐 ARQUITECTURA DE RUTAS
+═══════════════════════════════════════════════════════════════════
+
+https://rettai.com/
+├── /                      → web-rettai (Landing)
+└── /admin                 → web-rettai-admin (Dashboard)
+    ├── /admin/products    → (Futuro)
+    ├── /admin/orders      → (Futuro)
+    └── /admin/settings    → (Futuro)
+
+═══════════════════════════════════════════════════════════════════
+⚙️ CONFIGURACIONES IMPORTANTES
+═══════════════════════════════════════════════════════════════════
+
+web-rettai/next.config.js:
+──────────────────────────
+{
+  output: 'export',         // Static export
+  images: { unoptimized },  // Para S3/Amplify
+  trailingSlash: true       // URLs con /
+}
+
+web-rettai-admin/next.config.js:
+────────────────────────────────
+{
+  output: 'export',         // Static export
+  basePath: '/admin',       // Todas las rutas bajo /admin
+  images: { unoptimized },
+  trailingSlash: true
+}
+
+═══════════════════════════════════════════════════════════════════
+🎨 STACK TECNOLÓGICO
+═══════════════════════════════════════════════════════════════════
+
+Framework:     Next.js 14 (App Router)
+Styling:       Tailwind CSS 3
+Language:      TypeScript 5
+Build:         Static Export (SSG)
+Hosting:       AWS Amplify / S3 + CloudFront
+
+Ambas apps:
+✅ TypeScript completo
+✅ Tailwind CSS configurado
+✅ Dark mode automático
+✅ Export estático
+✅ Zero config deployment
+
+═══════════════════════════════════════════════════════════════════
+📋 PRÓXIMOS PASOS
+═══════════════════════════════════════════════════════════════════
+
+1. Instalar dependencias:
+   cd frontends/web-rettai && npm install
+   cd ../web-rettai-admin && npm install
+
+2. Probar localmente:
+   cd frontends
+   ./dev.sh
+
+3. Configurar Amplify en Terraform (siguiente paso)
+
+4. Deploy automático con Amplify
+
+5. Acceder a:
+   https://rettai.com      → Main site
+   https://rettai.com/admin → Admin panel
+
+═══════════════════════════════════════════════════════════════════
+🔮 FUNCIONALIDADES FUTURAS
+═══════════════════════════════════════════════════════════════════
+
+web-rettai (Main):
+□ Catálogo de productos
+□ Búsqueda y filtros
+□ Carrito de compras
+□ Checkout con Stripe
+□ Detalles de producto
+□ Categorías
+
+web-rettai-admin (Admin):
+□ Autenticación (Cognito)
+□ CRUD de productos
+□ Gestión de órdenes
+□ Panel de clientes
+□ Analytics en tiempo real
+□ Configuración de tienda
+□ Gestión de inventario
+□ Reportes y exportación
+
+═══════════════════════════════════════════════════════════════════
+📚 DOCUMENTACIÓN
+═══════════════════════════════════════════════════════════════════
+
+frontends/README.md              → Overview general
+frontends/web-rettai/README.md   → Docs del sitio principal
+frontends/web-rettai-admin/README.md → Docs del panel admin
+
+═══════════════════════════════════════════════════════════════════
+✅ TODO LISTO PARA DESARROLLO
+═══════════════════════════════════════════════════════════════════
+
+Comandos rápidos:
+
+# Desarrollo
+cd frontends && ./dev.sh
+
+# Build
+cd frontends && ./build.sh
+
+# Ver estructura
+tree frontends -L 2
+
+# Instalar todo
+cd frontends/web-rettai && npm install
+cd ../web-rettai-admin && npm install
