@@ -1,93 +1,70 @@
-variable "domain_name" {
-  description = "Domain name for CloudFront distribution"
-  type        = string
-}
-
 variable "project_name" {
-  description = "Project name for resource naming"
+  description = "Project name"
   type        = string
 }
 
 variable "environment" {
-  description = "Environment (dev, staging, prod)"
+  description = "Environment"
   type        = string
 }
 
-variable "route53_zone_id" {
-  description = "Route53 hosted zone ID for DNS validation"
+variable "domain_aliases" {
+  description = "Domain aliases for CloudFront (e.g., ['rettai.com', 'www.rettai.com'])"
+  type        = list(string)
+}
+
+variable "acm_certificate_arn" {
+  description = "ACM certificate ARN (must be in us-east-1)"
   type        = string
 }
 
-variable "origin_domain_name" {
-  description = "Origin domain name (e.g., S3 bucket domain)"
+variable "web_origin_domain" {
+  description = "Origin domain for web app (Amplify default domain)"
   type        = string
 }
 
-variable "origin_id" {
-  description = "Origin ID"
+variable "admin_origin_domain" {
+  description = "Origin domain for admin app (Amplify default domain)"
   type        = string
 }
 
-variable "origin_access_identity_path" {
-  description = "CloudFront Origin Access Identity path"
+variable "api_origin_domain" {
+  description = "Origin domain for API Gateway"
   type        = string
 }
 
 variable "waf_web_acl_arn" {
-  description = "WAF Web ACL ARN"
+  description = "WAF Web ACL ARN (optional)"
   type        = string
+  default     = null
 }
 
 variable "price_class" {
-  description = "CloudFront distribution price class"
+  description = "CloudFront price class"
   type        = string
-  default     = "PriceClass_100"
+  default     = "PriceClass_100" # US, Canada, Europe
 }
 
-variable "default_root_object" {
-  description = "Default root object"
+variable "api_cache_policy_id" {
+  description = "Cache policy ID for API behavior (use managed policy 4135ea2d-6df8-44a3-9df3-4b5a84be39ad for no caching)"
   type        = string
-  default     = "index.html"
+  default     = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad" # Managed-CachingDisabled
 }
 
-variable "enable_ipv6" {
-  description = "Enable IPv6 for CloudFront distribution"
-  type        = bool
-  default     = true
-}
-
-variable "minimum_protocol_version" {
-  description = "Minimum TLS protocol version"
+variable "geo_restriction_type" {
+  description = "Geo restriction type (none, whitelist, blacklist)"
   type        = string
-  default     = "TLSv1.2_2021"
+  default     = "none"
 }
 
-variable "default_ttl" {
-  description = "Default TTL for cached objects"
-  type        = number
-  default     = 3600
-}
-
-variable "max_ttl" {
-  description = "Maximum TTL for cached objects"
-  type        = number
-  default     = 86400
-}
-
-variable "min_ttl" {
-  description = "Minimum TTL for cached objects"
-  type        = number
-  default     = 0
-}
-
-variable "create_www_alias" {
-  description = "Create www subdomain alias"
-  type        = bool
-  default     = true
+variable "geo_restriction_locations" {
+  description = "Geo restriction locations (country codes)"
+  type        = list(string)
+  default     = []
 }
 
 variable "tags" {
-  description = "Additional tags for resources"
+  description = "Additional tags"
   type        = map(string)
   default     = {}
 }

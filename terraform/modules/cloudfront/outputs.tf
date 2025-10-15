@@ -14,16 +14,17 @@ output "distribution_domain_name" {
 }
 
 output "distribution_hosted_zone_id" {
-  description = "CloudFront distribution hosted zone ID"
+  description = "CloudFront distribution hosted zone ID (for Route53)"
   value       = aws_cloudfront_distribution.main.hosted_zone_id
 }
 
-output "certificate_arn" {
-  description = "ACM certificate ARN"
-  value       = aws_acm_certificate.main.arn
+output "api_secret_parameter_name" {
+  description = "SSM Parameter name for API secret"
+  value       = aws_ssm_parameter.api_secret.name
 }
 
-output "custom_domain_url" {
-  description = "Custom domain URL"
-  value       = "https://${var.domain_name}"
+output "api_secret_value" {
+  description = "API secret value (sensitive)"
+  value       = random_password.api_secret.result
+  sensitive   = true
 }

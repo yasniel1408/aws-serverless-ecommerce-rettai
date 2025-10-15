@@ -31,8 +31,15 @@ variable "project_name" {
 }
 
 variable "domain_name" {
-  description = "Custom domain name"
+  description = "Custom domain name (optional)"
   type        = string
+  default     = ""
+}
+
+variable "enable_domain" {
+  description = "Enable custom domain association"
+  type        = bool
+  default     = false
 }
 
 variable "enable_auto_branch_creation" {
@@ -47,22 +54,49 @@ variable "enable_auto_build" {
   default     = true
 }
 
+variable "enable_branch_auto_deletion" {
+  description = "Enable automatic branch deletion"
+  type        = bool
+  default     = true
+}
+
 variable "framework" {
-  description = "Framework for build (e.g., Next.js SSR, Next.js SSG)"
+  description = "Framework for build (e.g., Next.js - SSR, Next.js - SSG)"
   type        = string
-  default     = "Next.js - SSG"
+  default     = "Next.js - SSR"
+}
+
+variable "platform" {
+  description = "Amplify platform type (WEB for SSG, WEB_COMPUTE for SSR)"
+  type        = string
+  default     = "WEB_COMPUTE"
 }
 
 variable "build_spec" {
-  description = "Custom build spec (YAML format)"
+  description = "Build spec (YAML format)"
   type        = string
-  default     = ""
 }
 
 variable "environment_variables" {
   description = "Environment variables for build"
   type        = map(string)
   default     = {}
+}
+
+variable "custom_rules" {
+  description = "Custom routing rules"
+  type = list(object({
+    source = string
+    target = string
+    status = string
+  }))
+  default = []
+}
+
+variable "subdomain_prefix" {
+  description = "Subdomain prefix for custom domain (e.g., 'www', 'admin')"
+  type        = string
+  default     = ""
 }
 
 variable "tags" {

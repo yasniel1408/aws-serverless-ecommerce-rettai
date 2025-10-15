@@ -1,0 +1,22 @@
+{
+  "name": "identity-lambda",
+  "version": "1.0.0",
+  "description": "Identity Lambda - Authentication (Cognito PKCE + Google) and Authorization (Verified Permissions)",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "zip -r function.zip src/ node_modules/ package.json"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.0.0",
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0",
+    "@aws-sdk/client-verifiedpermissions": "^3.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}

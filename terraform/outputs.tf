@@ -9,25 +9,26 @@ output "route53_nameservers" {
   value       = var.create_route53_zone ? module.route53[0].name_servers : data.aws_route53_zone.existing[0].name_servers
 }
 
-# Amplify Outputs
-output "amplify_app_id" {
-  description = "Amplify app ID"
-  value       = module.amplify.app_id
+# Web Rettai Outputs (Main Site)
+output "web_rettai_app_id" {
+  description = "Web Rettai Amplify app ID"
+  value       = module.web_rettai.amplify_app_id
 }
 
-output "amplify_default_domain" {
-  description = "Amplify default domain"
-  value       = module.amplify.default_domain
+output "web_rettai_url" {
+  description = "Web Rettai URL"
+  value       = module.web_rettai.custom_domain_url
 }
 
-output "amplify_branch_url" {
-  description = "Amplify branch URL"
-  value       = module.amplify.branch_url
+# Web Rettai Admin Outputs (Admin Panel)
+output "web_rettai_admin_app_id" {
+  description = "Web Rettai Admin Amplify app ID"
+  value       = module.web_rettai_admin.amplify_app_id
 }
 
-output "amplify_custom_domain_url" {
-  description = "Custom domain URL"
-  value       = module.amplify.custom_domain_url
+output "web_rettai_admin_url" {
+  description = "Web Rettai Admin URL"
+  value       = module.web_rettai_admin.custom_domain_url
 }
 
 # WAF Outputs

@@ -61,19 +61,32 @@ module "waf" {
   blocked_countries       = var.waf_blocked_countries
 }
 
-# Amplify Module - Deploy frontends from GitHub
-module "amplify" {
-  source = "./modules/amplify"
+# System: Web Rettai (Main Site) - rettai.com
+module "web_rettai" {
+  source = "./systems/web-rettai"
 
-  app_name            = "${var.project_name}-${var.environment}"
-  repository          = var.github_repository
-  branch_name         = var.github_branch
-  github_access_token = var.github_token
-  domain_name         = var.domain_name
-  project_name        = var.project_name
-  environment         = var.environment
+  project_name                  = var.project_name
+  environment                   = var.environment
+  github_repository             = var.github_repository
+  github_branch                 = var.github_branch
+  github_token                  = var.github_token
+  domain_name                   = var.domain_name
+  amplify_environment_variables = var.amplify_environment_variables
 
-  environment_variables = var.amplify_environment_variables
+  depends_on = [data.aws_route53_zone.existing, module.route53]
+}
+
+# System: Web Rettai Admin (Admin Panel) - admin.rettai.com
+module "web_rettai_admin" {
+  source = "./systems/web-rettai-admin"
+
+  project_name                  = var.project_name
+  environment                   = var.environment
+  github_repository             = var.github_repository
+  github_branch                 = var.github_branch
+  github_token                  = var.github_token
+  domain_name                   = var.domain_name
+  amplify_environment_variables = var.amplify_environment_variables
 
   depends_on = [data.aws_route53_zone.existing, module.route53]
 }

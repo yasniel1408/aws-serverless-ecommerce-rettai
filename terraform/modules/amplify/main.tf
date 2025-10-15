@@ -1,4 +1,4 @@
-# Amplify App
+# Amplify App - Generic for single app
 resource "aws_amplify_app" "main" {
   name       = var.app_name
   repository = var.repository
@@ -7,77 +7,27 @@ resource "aws_amplify_app" "main" {
   access_token = var.github_access_token
 
   # Build settings
-  build_spec = var.build_spec != "" ? var.build_spec : <<-EOT
-    version: 1
-    applications:
-      - appRoot: frontends/web-rettai
-        frontend:
-          phases:
-            preBuild:
-              commands:
-                - npm ci
-            build:
-              commands:
-                - npm run build
-          artifacts:
-            baseDirectory: out
-            files:
-              - '**/*'
-          cache:
-            paths:
-              - node_modules/**/*
-      - appRoot: frontends/web-rettai-admin
-        frontend:
-          phases:
-            preBuild:
-              commands:
-                - npm ci
-            build:
-              commands:
-                - npm run build
-          artifacts:
-            baseDirectory: out
-            files:
-              - '**/*'
-          cache:
-            paths:
-              - node_modules/**/*
-  EOT
+  build_spec = var.build_spec
 
   # Platform
-  platform = "WEB_COMPUTE"
+  platform = var.platform
 
   # Auto branch creation
   enable_auto_branch_creation = var.enable_auto_branch_creation
   enable_branch_auto_build    = var.enable_auto_build
-  enable_branch_auto_deletion = true
+  enable_branch_auto_deletion = var.enable_branch_auto_deletion
 
   # Environment variables
-  dynamic "environment_variables" {
-    for_each = var.environment_variables
+  environment_variables = var.environment_variables
+
+  # Custom rules (optional)
+  dynamic "custom_rule" {
+    for_each = var.custom_rules
     content {
-      name  = environment_variables.key
-      value = environment_variables.value
+      source = custom_rule.value.source
+      target = custom_rule.value.target
+      status = custom_rule.value.status
     }
-  }
-
-  # Custom rules for routing
-  custom_rule {
-    source = "/admin"
-    target = "/admin/index.html"
-    status = "200"
-  }
-
-  custom_rule {
-    source = "/admin/*"
-    target = "/admin/index.html"
-    status = "200"
-  }
-
-  custom_rule {
-    source = "/<*>"
-    target = "/index.html"
-    status = "404-200"
   }
 
   tags = merge(
@@ -89,8 +39,7 @@ resource "aws_amplify_app" "main" {
     var.tags
   )
 }
-
-# Main branch
+# Main branch deployment
 resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.main.id
   branch_name = var.branch_name
@@ -110,22 +59,17 @@ resource "aws_amplify_branch" "main" {
     var.tags
   )
 }
-
-# Domain association
+# Domain association for custom domain (optional)
 resource "aws_amplify_domain_association" "main" {
+  count = var.enable_domain ? 1 : 0
+
   app_id      = aws_amplify_app.main.id
   domain_name = var.domain_name
 
-  # Root domain
+  # Subdomain configuration
   sub_domain {
     branch_name = aws_amplify_branch.main.branch_name
-    prefix      = ""
-  }
-
-  # WWW subdomain
-  sub_domain {
-    branch_name = aws_amplify_branch.main.branch_name
-    prefix      = "www"
+    prefix      = var.subdomain_prefix
   }
 
   wait_for_verification = false

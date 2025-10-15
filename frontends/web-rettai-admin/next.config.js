@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Removed 'output: export' for SSR support
+  // output: 'export', // This is for SSG only
+  
+  // Enable image optimization with Amplify
   images: {
-    unoptimized: true,
+    unoptimized: false, // Amplify supports optimized images with SSR
   },
+  
   basePath: '/admin',
   trailingSlash: true,
 }

@@ -30,5 +30,5 @@ output "custom_domain_url" {
 
 output "domain_association_status" {
   description = "Domain association status"
-  value       = aws_amplify_domain_association.main.certificate_verification_dns_record
+  value       = var.enable_domain ? aws_amplify_domain_association.main[0].certificate_verification_dns_record : null
 }
