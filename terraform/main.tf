@@ -10,13 +10,15 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region  = var.aws_region
+  profile = var.aws_profile
 }
 
 # Provider for WAF (must be us-east-1 for CloudFront)
 provider "aws" {
-  alias  = "us_east_1"
-  region = "us-east-1"
+  alias   = "us_east_1"
+  region  = "us-east-1"
+  profile = var.aws_profile
 }
 
 # Route53 Module (solo si se necesita crear nueva zona)

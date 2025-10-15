@@ -1,0 +1,34 @@
+aws_region   = "us-east-1"
+aws_profile  = "default"  # Cambiar a tu perfil AWS CLI (ej: mi-aws)
+domain_name  = "example.com"
+project_name = "ecommerce"
+environment  = "dev"
+
+# Route53 Configuration
+# Opción 1: Usar zona existente (recomendado si ya tienes el dominio)
+create_route53_zone      = false
+existing_route53_zone_id = "ZXXXXXXXXXXXXX"  # Tu hosted zone ID
+
+# Opción 2: Crear nueva zona (descomentar y comentar opción 1)
+# create_route53_zone      = true
+# existing_route53_zone_id = ""
+
+# GitHub Configuration
+github_repository = "https://github.com/tu-usuario/tu-repositorio"
+github_branch     = "main"
+github_token      = "ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"  # Tu GitHub Personal Access Token
+
+# Amplify Environment Variables
+amplify_environment_variables = {
+  NEXT_PUBLIC_API_URL = "https://api.example.com"
+  NODE_ENV            = "production"
+}
+
+# WAF Configuration (opcional - Amplify ya tiene protección básica)
+enable_waf               = false
+enable_waf_core_rules    = true
+enable_waf_bad_inputs    = true
+enable_waf_rate_limit    = true
+waf_rate_limit           = 2000
+enable_waf_geo_blocking  = false
+waf_blocked_countries    = ["CN", "RU", "KP"]
