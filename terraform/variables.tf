@@ -109,3 +109,122 @@ variable "waf_blocked_countries" {
   type        = list(string)
   default     = []
 }
+
+# API Gateway Configuration
+variable "api_cors_allow_origins" {
+  description = "CORS allowed origins for API Gateway"
+  type        = list(string)
+  default     = ["*"]
+}
+
+variable "api_cors_allow_methods" {
+  description = "CORS allowed methods for API Gateway"
+  type        = list(string)
+  default     = ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+}
+
+variable "api_cors_allow_headers" {
+  description = "CORS allowed headers for API Gateway"
+  type        = list(string)
+  default     = ["*"]
+}
+
+variable "api_cors_max_age" {
+  description = "CORS max age in seconds for API Gateway"
+  type        = number
+  default     = 300
+}
+
+variable "api_throttle_burst_limit" {
+  description = "API Gateway throttle burst limit"
+  type        = number
+  default     = 5000
+}
+
+variable "api_throttle_rate_limit" {
+  description = "API Gateway throttle rate limit (requests per second)"
+  type        = number
+  default     = 10000
+}
+
+variable "api_log_retention_days" {
+  description = "API Gateway CloudWatch log retention in days"
+  type        = number
+  default     = 7
+}
+
+# Lambda Configuration
+variable "lambda_log_retention_days" {
+  description = "Lambda CloudWatch log retention in days"
+  type        = number
+  default     = 7
+}
+
+# VPC Configuration
+variable "vpc_cidr" {
+  description = "CIDR block for VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+variable "public_subnet_cidrs" {
+  description = "CIDR blocks for public subnets"
+  type        = list(string)
+  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+}
+
+variable "private_subnet_cidrs" {
+  description = "CIDR blocks for private subnets"
+  type        = list(string)
+  default     = ["10.0.11.0/24", "10.0.12.0/24"]
+}
+
+variable "availability_zones" {
+  description = "Availability zones for VPC subnets"
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b"]
+}
+
+variable "enable_nat_gateway" {
+  description = "Enable NAT gateway for private subnets"
+  type        = bool
+  default     = true
+}
+
+# Inventory Database Configuration
+variable "inventory_db_username" {
+  description = "Inventory database master username"
+  type        = string
+  default     = "inventory_admin"
+  sensitive   = true
+}
+
+variable "inventory_db_password" {
+  description = "Inventory database master password"
+  type        = string
+  sensitive   = true
+}
+
+variable "inventory_db_min_capacity" {
+  description = "Minimum Aurora capacity units for inventory DB"
+  type        = number
+  default     = 0.5
+}
+
+variable "inventory_db_max_capacity" {
+  description = "Maximum Aurora capacity units for inventory DB"
+  type        = number
+  default     = 2
+}
+
+variable "inventory_db_backup_retention" {
+  description = "Backup retention period in days for inventory DB"
+  type        = number
+  default     = 7
+}
+
+variable "inventory_db_skip_final_snapshot" {
+  description = "Skip final snapshot on deletion for inventory DB"
+  type        = bool
+  default     = false
+}

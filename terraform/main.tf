@@ -1,6 +1,6 @@
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -46,7 +46,7 @@ locals {
 module "waf" {
   count  = var.enable_waf ? 1 : 0
   source = "./modules/waf"
-  
+
   providers = {
     aws = aws.us_east_1
   }
@@ -89,4 +89,88 @@ module "web_rettai_admin" {
   amplify_environment_variables = var.amplify_environment_variables
 
   depends_on = [data.aws_route53_zone.existing, module.route53]
+}
+
+# System: API Gateway - api.rettai.com
+module "api_gateway" {
+  source = "./systems/api-gateway"
+
+  project_name    = var.project_name
+  environment     = var.environment
+  domain_name     = var.domain_name
+  route53_zone_id = local.route53_zone_id
+
+  # CORS Configuration
+  cors_allow_origins = var.api_cors_allow_origins
+  cors_allow_methods = var.api_cors_allow_methods
+  cors_allow_headers = var.api_cors_allow_headers
+  cors_max_age       = var.api_cors_max_age
+
+  # Throttling
+  throttle_burst_limit = var.api_throttle_burst_limit
+  throttle_rate_limit  = var.api_throttle_rate_limit
+
+  # Logging
+  log_retention_days = var.api_log_retention_days
+
+  depends_on = [data.aws_route53_zone.existing, module.route53]
+}
+
+# System: Identity Lambda
+module "identity_lambda" {
+  source = "./systems/identity-lambda"
+
+  project_name              = var.project_name
+  environment               = var.environment
+  aws_region                = var.aws_region
+  api_gateway_id            = module.api_gateway.api_id
+  api_gateway_execution_arn = module.api_gateway.api_execution_arn
+
+  log_retention_days = var.lambda_log_retention_days
+
+  depends_on = [module.api_gateway]
+}
+
+# VPC Module (for Lambda and RDS)
+module "vpc" {
+  source = "./modules/vpc"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  availability_zones   = var.availability_zones
+
+  enable_nat_gateway = var.enable_nat_gateway
+}
+
+# System: Inventory Lambda (Admin-only inventory management)
+module "inventory_lambda" {
+  source = "./systems/inventory-lambda"
+
+  project_name              = var.project_name
+  environment               = var.environment
+  aws_region                = var.aws_region
+  api_gateway_id            = module.api_gateway.api_id
+  api_gateway_execution_arn = module.api_gateway.api_execution_arn
+  identity_api_url          = module.api_gateway.custom_domain_url
+
+  # VPC Configuration
+  vpc_id                 = module.vpc.vpc_id
+  vpc_private_subnet_ids = module.vpc.private_subnet_ids
+
+  # Database Configuration
+  db_username                = var.inventory_db_username
+  db_password                = var.inventory_db_password
+  db_min_capacity            = var.inventory_db_min_capacity
+  db_max_capacity            = var.inventory_db_max_capacity
+  db_backup_retention_period = var.inventory_db_backup_retention
+  db_skip_final_snapshot     = var.inventory_db_skip_final_snapshot
+
+  # Logging
+  log_retention_days = var.lambda_log_retention_days
+
+  depends_on = [module.api_gateway, module.vpc]
 }

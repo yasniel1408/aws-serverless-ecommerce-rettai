@@ -27,7 +27,7 @@ resource "aws_verifiedpermissions_schema" "main" {
           }
           Resource = {
             shape = {
-              type = "Record"
+              type       = "Record"
               attributes = {}
             }
           }

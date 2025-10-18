@@ -32,3 +32,30 @@ enable_waf_rate_limit    = true
 waf_rate_limit           = 2000
 enable_waf_geo_blocking  = false
 waf_blocked_countries    = ["CN", "RU", "KP"]
+
+# API Gateway Configuration
+api_cors_allow_origins = ["https://example.com", "https://admin.example.com"]
+api_cors_allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"]
+api_cors_allow_headers = ["*"]
+api_cors_max_age       = 300
+api_throttle_burst_limit = 5000
+api_throttle_rate_limit  = 10000
+api_log_retention_days   = 7
+
+# Lambda Configuration
+lambda_log_retention_days = 7
+
+# VPC Configuration (for Lambda and RDS)
+vpc_cidr             = "10.0.0.0/16"
+public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs = ["10.0.11.0/24", "10.0.12.0/24"]
+availability_zones   = ["us-east-1a", "us-east-1b"]
+enable_nat_gateway   = true # Required for Lambda to access internet and Aurora
+
+# Inventory Database Configuration
+inventory_db_username               = "inventory_admin"
+inventory_db_password               = "ChangeThisSecurePassword123!"  # Change to strong password
+inventory_db_min_capacity           = 0.5  # Minimum Aurora ACU (cost-effective)
+inventory_db_max_capacity           = 2    # Maximum Aurora ACU
+inventory_db_backup_retention       = 7    # Days
+inventory_db_skip_final_snapshot    = false # Set to true for dev/test

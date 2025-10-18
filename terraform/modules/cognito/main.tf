@@ -97,7 +97,7 @@ resource "aws_cognito_user_pool_client" "main" {
 
   # PKCE configuration
   generate_secret = false # Must be false for PKCE
-  
+
   # Token validity
   access_token_validity  = var.access_token_validity
   id_token_validity      = var.id_token_validity
