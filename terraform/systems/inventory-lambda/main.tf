@@ -30,7 +30,6 @@ module "inventory_lambda" {
     IDENTITY_API_URL = var.identity_api_url
     NODE_ENV         = var.environment == "prod" ? "production" : "development"
     CORS_ORIGIN      = var.cors_origin
-    AWS_REGION       = var.aws_region
   }
 
   # VPC Configuration for Lambda to access RDS
@@ -38,6 +37,7 @@ module "inventory_lambda" {
   vpc_security_group_ids = [aws_security_group.lambda.id]
 
   # Custom IAM policy for Lambda
+  enable_custom_policy = true
   custom_policy_json = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -64,8 +64,9 @@ module "inventory_lambda" {
   })
 
   # Connect to API Gateway
-  api_gateway_id            = var.api_gateway_id
-  api_gateway_execution_arn = var.api_gateway_execution_arn
+  enable_api_gateway_permission = true
+  api_gateway_id                = var.api_gateway_id
+  api_gateway_execution_arn     = var.api_gateway_execution_arn
 
   log_retention_days = var.log_retention_days
 

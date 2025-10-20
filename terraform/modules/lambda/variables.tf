@@ -63,7 +63,13 @@ variable "vpc_security_group_ids" {
 variable "custom_policy_json" {
   description = "Custom IAM policy JSON for Lambda (optional)"
   type        = string
-  default     = null
+  default     = ""
+}
+
+variable "enable_custom_policy" {
+  description = "Enable custom IAM policy for Lambda"
+  type        = bool
+  default     = false
 }
 
 variable "log_retention_days" {
@@ -72,16 +78,22 @@ variable "log_retention_days" {
   default     = 7
 }
 
+variable "enable_api_gateway_permission" {
+  description = "Enable API Gateway Lambda permission"
+  type        = bool
+  default     = false
+}
+
 variable "api_gateway_id" {
   description = "API Gateway ID for Lambda permission (optional)"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "api_gateway_execution_arn" {
   description = "API Gateway execution ARN for Lambda permission (optional)"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "tags" {

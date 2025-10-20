@@ -97,10 +97,10 @@ module "identity_lambda" {
     CLIENT_ID       = module.identity_cognito.client_id
     TABLE_NAME      = module.identity_dynamodb.table_name
     POLICY_STORE_ID = module.identity_verified_permissions.policy_store_id
-    AWS_REGION      = var.aws_region
   }
 
   # Custom IAM policy for Lambda
+  enable_custom_policy = true
   custom_policy_json = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -142,8 +142,9 @@ module "identity_lambda" {
   })
 
   # Connect to API Gateway
-  api_gateway_id            = var.api_gateway_id
-  api_gateway_execution_arn = var.api_gateway_execution_arn
+  enable_api_gateway_permission = true
+  api_gateway_id                = var.api_gateway_id
+  api_gateway_execution_arn     = var.api_gateway_execution_arn
 
   log_retention_days = var.log_retention_days
 

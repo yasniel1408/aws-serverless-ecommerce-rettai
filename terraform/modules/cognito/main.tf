@@ -63,8 +63,8 @@ resource "aws_cognito_user_pool" "main" {
     }
   }
 
-  # MFA configuration
-  mfa_configuration = var.mfa_configuration
+  # MFA configuration - OPTIONAL to allow users to set it up if they want
+  mfa_configuration = "OPTIONAL"
 
   # Device tracking
   device_configuration {
@@ -80,6 +80,11 @@ resource "aws_cognito_user_pool" "main" {
     },
     var.tags
   )
+
+  # Force recreation if schema changes
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # Cognito User Pool Client

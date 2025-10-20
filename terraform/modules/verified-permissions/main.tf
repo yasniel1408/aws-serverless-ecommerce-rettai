@@ -22,13 +22,20 @@ resource "aws_verifiedpermissions_schema" "main" {
                 role = {
                   type = "String"
                 }
+                userId = {
+                  type = "String"
+                }
               }
             }
           }
           Resource = {
             shape = {
               type       = "Record"
-              attributes = {}
+              attributes = {
+                ownerId = {
+                  type = "String"
+                }
+              }
             }
           }
         }
@@ -94,8 +101,8 @@ resource "aws_verifiedpermissions_policy" "admin_panel_access" {
       statement   = <<-EOT
         permit(
           principal,
-          action == Action::"access",
-          resource == Resource::"admin-panel"
+          action == rettai::Application::Action::"access",
+          resource == rettai::Application::Resource::"admin-panel"
         )
         when {
           principal.role == "admin"
@@ -115,7 +122,7 @@ resource "aws_verifiedpermissions_policy" "user_read_own" {
       statement   = <<-EOT
         permit(
           principal,
-          action == Action::"read",
+          action == rettai::Application::Action::"read",
           resource
         )
         when {

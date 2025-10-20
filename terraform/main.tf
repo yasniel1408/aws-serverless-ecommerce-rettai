@@ -61,35 +61,36 @@ module "waf" {
   blocked_countries       = var.waf_blocked_countries
 }
 
-# System: Web Rettai (Main Site) - rettai.com
-module "web_rettai" {
-  source = "./systems/web-rettai"
-
-  project_name                  = var.project_name
-  environment                   = var.environment
-  github_repository             = var.github_repository
-  github_branch                 = var.github_branch
-  github_token                  = var.github_token
-  domain_name                   = var.domain_name
-  amplify_environment_variables = var.amplify_environment_variables
-
-  depends_on = [data.aws_route53_zone.existing, module.route53]
-}
-
-# System: Web Rettai Admin (Admin Panel) - admin.rettai.com
-module "web_rettai_admin" {
-  source = "./systems/web-rettai-admin"
-
-  project_name                  = var.project_name
-  environment                   = var.environment
-  github_repository             = var.github_repository
-  github_branch                 = var.github_branch
-  github_token                  = var.github_token
-  domain_name                   = var.domain_name
-  amplify_environment_variables = var.amplify_environment_variables
-
-  depends_on = [data.aws_route53_zone.existing, module.route53]
-}
+# Temporarily disabled - requires valid GitHub personal access token
+# module "web_rettai" {
+#   source = "./systems/web-rettai"
+#
+#   project_name                  = var.project_name
+#   environment                   = var.environment
+#   github_repository             = var.github_repository
+#   github_branch                 = var.github_branch
+#   github_token                  = var.github_token
+#   domain_name                   = var.domain_name
+#   amplify_environment_variables = var.amplify_environment_variables
+#
+#   depends_on = [data.aws_route53_zone.existing, module.route53]
+# }
+#
+# # System: Web Rettai Admin (Admin Panel) - admin.rettai.com
+# # Temporarily disabled - requires valid GitHub personal access token
+# module "web_rettai_admin" {
+#   source = "./systems/web-rettai-admin"
+#
+#   project_name                  = var.project_name
+#   environment                   = var.environment
+#   github_repository             = var.github_repository
+#   github_branch                 = var.github_branch
+#   github_token                  = var.github_token
+#   domain_name                   = var.domain_name
+#   amplify_environment_variables = var.amplify_environment_variables
+#
+#   depends_on = [data.aws_route53_zone.existing, module.route53]
+# }
 
 # System: API Gateway - api.rettai.com
 module "api_gateway" {

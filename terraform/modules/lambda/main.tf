@@ -4,7 +4,7 @@ resource "aws_lambda_function" "main" {
   function_name    = "${var.project_name}-${var.function_name}-${var.environment}"
   role             = aws_iam_role.lambda.arn
   handler          = var.handler
-  source_code_hash = filebase64sha256(var.lambda_zip_path)
+  source_code_hash = try(filebase64sha256(var.lambda_zip_path), null)
   runtime          = var.runtime
   timeout          = var.timeout
   memory_size      = var.memory_size
@@ -29,6 +29,10 @@ resource "aws_lambda_function" "main" {
     },
     var.tags
   )
+
+  lifecycle {
+    ignore_changes = [source_code_hash]
+  }
 }
 
 # IAM Role for Lambda
@@ -73,7 +77,7 @@ resource "aws_iam_role_policy_attachment" "lambda_vpc" {
 
 # Custom IAM Policy for Lambda (optional)
 resource "aws_iam_role_policy" "lambda_custom" {
-  count  = var.custom_policy_json != null ? 1 : 0
+  count  = var.enable_custom_policy ? 1 : 0
   name   = "${var.project_name}-${var.function_name}-${var.environment}-custom-policy"
   role   = aws_iam_role.lambda.id
   policy = var.custom_policy_json
@@ -96,7 +100,7 @@ resource "aws_cloudwatch_log_group" "lambda" {
 
 # Lambda Permission for API Gateway (optional)
 resource "aws_lambda_permission" "api_gateway" {
-  count         = var.api_gateway_id != null ? 1 : 0
+  count         = var.enable_api_gateway_permission ? 1 : 0
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.main.function_name
